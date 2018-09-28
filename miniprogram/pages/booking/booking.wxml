@@ -1,0 +1,13 @@
+<!--pages/booking/booking.wxml-->
+<view class="container">
+  <view >
+    <button class="bookingBtn" bindtap="onBooking" wx:if="{{booked === 0}}">订餐</button>
+    <button class="bookingBtn bookingCancelBtn" bindtap="onCancelBooking" wx:if="{{booked === 1}}">取消订餐</button>
+  </view>
+  <view class="bookingSum">
+    <text>本月共订餐{{count}}份，需付{{sum}}元</text>
+  </view>
+  <view class="bookingDetail">
+    <button >详细订餐信息</button>
+  </view>
+</view>

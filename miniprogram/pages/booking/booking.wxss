@@ -1,0 +1,25 @@
+/* pages/booking/booking.wxss */
+@import "../../style/guide.wxss";
+
+.bookingBtn{
+    height: 180px;
+    width: 180px;
+    background-color: #499AFA;
+    border-radius: 50%;
+    border:none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 35px;
+    font-weight: bold;
+}
+.bookingCancelBtn{
+  background-color: #FF0052;
+}
+.bookingSum{
+  margin-top: 10%;
+}
+.bookingDetail{
+  margin-top: 10%;
+}
