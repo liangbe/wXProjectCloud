@@ -1,0 +1,28 @@
+/* pages/bookingList/bookingList.wxss */
+@import "../../style/guide.wxss";
+page {
+  
+  justify-content: start;
+
+}
+.liStyle{
+  margin-top:10px;
+  margin-left:5%;
+  margin-right:5%;
+  width:90%;
+
+}
+.liStyle:first-child{
+  margin-top: 0px;
+}
+.liMsg{
+  float: right;
+}
+.line{
+  width: 95%;
+  border-top:1px solid #000; 
+  margin: 0px 2.5%;
+}
+.bookingText{
+  margin-bottom: 15px;
+}

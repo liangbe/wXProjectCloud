@@ -1,0 +1,10 @@
+<!--pages/bookingList/bookingList.wxml-->
+<view class="container">
+      <view><text class="bookingText" >本月订餐记录</text></view>
+      <scroll-view class="liStyle" wx:for="{{arry}}" wx:key="">
+             <text>{{item.year}}</text>-<text>{{item.month}}</text>-<text>{{item.date}}</text>
+             <text class="liMsg">订饭成功！</text>
+             <view class="line"></view>
+     </scroll-view>
+
+</view>

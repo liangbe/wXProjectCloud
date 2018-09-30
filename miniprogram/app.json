@@ -2,6 +2,7 @@
   "cloud": true,
   "pages": [
     "pages/booking/booking",
+    "pages/bookingList/bookingList",
     "pages/index/index",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",

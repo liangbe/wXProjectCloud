@@ -1,6 +1,7 @@
 // pages/booking/booking.js
 const db = wx.cloud.database();
 const _ = db.command;
+const today = new Date();
 Page({
 
   /**
@@ -12,42 +13,62 @@ Page({
     userInfo: {},
     avatarUrl: './user-unlogin.png',
     booked:0,
-    _id:''
+    _id:'',
+    userName:"",
+    role:0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var _this=this;
     // 获取用户信息
+    
+
+   
     wx.getSetting({
       success: res => {
-        if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+        if (res.authSetting['scope.userInfo']) {
           wx.getUserInfo({
             success: res => {
-              this.setData({
+              _this.setData({
                 avatarUrl: res.userInfo.avatarUrl,
                 userInfo: res.userInfo
-              },()=>{this.loadMonthData();this.loadDateData();})
+              }, () => { 
+
+                _this.getUser(function(){
+                  _this.loadDateData(); _this.loadMonthData();
+                })
+                
+              })
+            },
+            fail: (res) =>{
+              console.log(res);
             }
           })
         }
+        
+        
       }
     });
+
     
+
+  
+
   },
   //判断今天是否已经订餐了
   loadDateData:function(){
     db.collection('record').where({
-      userName: _.eq("liangbe"),
-      year: _.eq(2018),
-      month: _.eq(9),
-      date: _.eq(28),
+      userName: _.eq(this.data.userName),
+      year: _.eq(today.getFullYear()),
+      month: _.eq(today.getMonth()+1),
+      date: _.eq(today.getDate()),
 
     }).get({
       success: res => {
-        console.log(res);
         if (res.data.length>0){
           this.setData({
             booked: 1,
@@ -63,13 +84,14 @@ Page({
   },
   //获取用户订餐基本信息
   loadMonthData: function(){
-    var count=db.collection('record').where({
-      userName: _.eq("liangbe"),
-      
+    var _this=this;
+   db.collection('record').where({
+     userName: _.eq(this.data.userName),
+     year: _.eq(today.getFullYear()),
+      month: _.eq(today.getMonth()+1), 
     }).count({
       success: res => {
-        console.log(res);
-        this.setData({
+        _this.setData({
           count: res.total,
           sum: res.total * 15 + ".00"
         })
@@ -85,13 +107,12 @@ Page({
     var _this=this;
     db.collection('record').add({
       data: {
-        userName:"liangbe",
-        year:2018,
-        month:9,
-        date:28
+        userName: this.data.userName,
+        year: today.getFullYear(),
+        month: today.getMonth() + 1,
+        date: today.getDate()
       },
       success: function (res) {
-        console.log(res)
         _this.setData({
           booked: 1,
           _id: res._id
@@ -104,7 +125,6 @@ Page({
     var _this=this;
     db.collection('record').doc(_this.data._id).remove({
       success: function (res) {
-        console.log(res);
         _this.setData({
           booked: 0
         }, () => _this.loadMonthData())
@@ -160,5 +180,24 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  getUser:function(callback){
+    var _this=this;
+    db.collection('user').where({
+      weiXinName: _.eq(_this.data.userInfo.nickName)
+    })
+    .get({
+      success: function (res) {
+        _this.setData({
+          userName: res.data[0].userName,
+          role: res.data[0].role
+        },()=>{callback()})
+      }
+    })
+  },
+  openBooKingList:function(){
+    wx.navigateTo({
+      url: '../bookingList/bookingList?userName='+this.data.userName,
+    })
   }
 })
